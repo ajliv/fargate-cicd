@@ -1,0 +1,36 @@
+description: "Updates an event rule target to run a particular task definition revision."
+
+parameters:
+  cluster:
+    type: string
+    description: ECS cluster name
+    default: $FARGATE_CLUSTER
+
+  rule:
+    type: string
+    description: CloudWatch Events Rule
+    default: $FARGATE_RULE
+
+  revision:
+    type: string
+    description: Task Definition Revision Number
+    default: $FARGATE_REVISION
+
+  task:
+    type: string
+    description: ECS task family name
+    default: $FARGATE_TASK
+
+  extra-args:
+    description: Extra flags to pass to fargate events target
+    type: string
+    default: ""
+
+steps:
+  - run:
+      name: Update event rule target
+      command: |
+        export FARGATE_CLUSTER="<< parameters.cluster >>"
+        export FARGATE_RULE="<< parameters.rule >>"
+        export FARGATE_TASK="<< parameters.task >>"
+        fargate events target -r <<parameters.revision>><<#parameters.extra-args>> <<parameters.extra-args>><</parameters.extra-args>>

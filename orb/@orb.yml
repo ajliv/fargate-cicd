@@ -1,0 +1,5 @@
+version: 2.1
+
+description: >
+  An orb for working with the Fargate CLI.
+  See this orb's source: https://github.com/turnerlabs/fargate-cicd

@@ -1,0 +1,39 @@
+description: >
+  Registers a new task definition revision for the specified docker image or
+  environment variables based on the latest revision of the task family and
+  returns the new revision number.
+
+parameters:
+  cluster:
+    type: string
+    description: ECS cluster name
+    default: $FARGATE_CLUSTER
+
+  task:
+    type: string
+    description: ECS task family name
+    default: $FARGATE_TASK
+
+  file:
+    description: Docker Compose file containing image and environment variables to register
+    type: string
+    default: ""
+
+  image:
+    description: Docker image to register
+    type: string
+    default: ""
+
+  extra-args:
+    description: Extra flags to pass to fargate task register
+    type: string
+    default: ""
+
+steps:
+  - run:
+      name: Register a new task definition revision
+      command: |
+        export FARGATE_CLUSTER="<< parameters.cluster >>"
+        export FARGATE_TASK="<< parameters.task >>"
+        REVISION=$(fargate task register<<#parameters.file>> -f <<parameters.file>><</parameters.file>><<#parameters.image>> -i <<parameters.image>><</parameters.image>><<#parameters.extra-args>> <<parameters.extra-args>><</parameters.extra-args>>)
+        echo "export FARGATE_REVISION='${REVISION}'" >> $BASH_ENV

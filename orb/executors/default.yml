@@ -1,0 +1,11 @@
+description: >
+  A build image for doing CI/CD with Docker and AWS Fargate:
+  https://github.com/turnerlabs/fargate-cicd
+
+parameters:
+  tag:
+    type: string
+    default: "latest"
+
+docker:
+  - image: quay.io/turner/fargate-cicd:<< parameters.tag >>

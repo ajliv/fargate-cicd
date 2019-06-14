@@ -1,0 +1,37 @@
+description: "Deploy applications to services"
+
+parameters:
+  cluster:
+    type: string
+    description: ECS cluster name
+    default: $FARGATE_CLUSTER
+
+  service:
+    type: string
+    description: ECS service name
+    default: $FARGATE_SERVICE
+
+  file:
+    description: >
+      Specify a docker-compose.yml file to deploy.
+      The image and environment variables in the file will be deployed.
+    type: string
+    default: ""
+
+  image:
+    description: Docker image to run in the service
+    type: string
+    default: ""
+
+  extra-args:
+    description: Extra flags to pass to fargate service deploy
+    type: string
+    default: ""
+
+steps:
+  - run:
+      name: Deploy service to Fargate
+      command: |
+        export FARGATE_CLUSTER="<< parameters.cluster >>"
+        export FARGATE_SERVICE="<< parameters.service >>"
+        fargate servide deploy<<#parameters.file>> -f <<parameters.file>><</parameters.file>><<#parameters.image>> -i <<parameters.image>><</parameters.image>><<#parameters.extra-args>> <<parameters.extra-args>><</parameters.extra-args>>
